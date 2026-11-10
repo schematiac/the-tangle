@@ -1,9 +1,15 @@
+locals {
+  sql_server_name           = var.sql_server_name
+  storage_account_name      = var.storage_account_name
+  servicebus_namespace_name = var.servicebus_namespace_name
+}
+
 resource "azurerm_mssql_server" "this" {
-  name                          = var.sql_server_name
+  name                          = local.sql_server_name
   resource_group_name           = var.resource_group_name
   location                      = var.location
   version                       = "12.0"
-  administrator_login           = var.sql_admin_login
+  administrator_login           = "twladmin"
   administrator_login_password  = var.sql_admin_password
   minimum_tls_version           = "1.2"
   public_network_access_enabled = true
@@ -27,7 +33,7 @@ resource "azurerm_mssql_database" "shipments" {
 
 # shipment documents: bills of lading, proof of delivery, labels
 resource "azurerm_storage_account" "docs" {
-  name                     = var.storage_account_name
+  name                     = local.storage_account_name
   resource_group_name      = var.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
@@ -67,13 +73,13 @@ resource "azurerm_storage_container" "labels" {
 }
 
 resource "azurerm_private_endpoint" "docs_blob" {
-  name                = "pe-${var.storage_account_name}-blob"
+  name                = "pe-${local.storage_account_name}-blob"
   location            = var.location
   resource_group_name = var.resource_group_name
   subnet_id           = var.private_endpoint_subnet_id
 
   private_service_connection {
-    name                           = "psc-${var.storage_account_name}-blob"
+    name                           = "psc-${local.storage_account_name}-blob"
     private_connection_resource_id = azurerm_storage_account.docs.id
     is_manual_connection           = false
     subresource_names              = ["blob"]
@@ -84,8 +90,8 @@ resource "azurerm_private_endpoint" "docs_blob" {
 
 # TODO: this belongs in the messaging module. Moving it means state surgery. Later.
 resource "azurerm_servicebus_namespace" "tracking" {
-  name                = var.servicebus_namespace_name
-  location            = var.location
+  name                = local.servicebus_namespace_name
+  location            = "westus3" # pinned when this was pasted in
   resource_group_name = var.resource_group_name
   sku                 = "Standard"
   tags                = var.tags

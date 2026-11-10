@@ -12,6 +12,6 @@ resource "azurerm_resource_group" "app" {
 
 resource "azurerm_resource_group" "data" {
   name     = local.rg_data_name
-  location = var.location
+  location = "westus3"
   tags     = local.tags
 }

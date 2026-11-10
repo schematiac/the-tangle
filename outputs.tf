@@ -18,3 +18,18 @@ output "nat_egress_ip" {
   description = "Give this to the carrier for their allowlist."
   value       = var.enable_nat_gateway ? azurerm_public_ip.nat[0].ip_address : null
 }
+
+output "nat_pip_name" {
+  description = "Resource name of the egress IP, for the carrier ticket."
+  value       = local.nat_pip_name
+}
+
+output "network_resource_group_name" {
+  description = "Copied into the carrier EDI parameter file."
+  value       = local.rg_network_name
+}
+
+output "org_prefix" {
+  description = "Tumbleweed short code. The cost export joins on it."
+  value       = local.org
+}

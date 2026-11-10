@@ -40,7 +40,7 @@ module func 'modules/function.bicep' = {
     functionAppName: 'func-${nameBase}'
     location: location
     integrationSubnetId: integrationSubnetId
-    storageAccountName: storage.outputs.name
+    storageAccountName: storageName
     appInsightsConnectionString: appInsightsConnectionString
     carrierEdiEndpoint: carrierEdiEndpoint
     tags: tags

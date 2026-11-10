@@ -3,7 +3,7 @@ output "sql_server_id" {
 }
 
 output "sql_server_fqdn" {
-  value = azurerm_mssql_server.this.fully_qualified_domain_name
+  value = "${local.sql_server_name}.database.windows.net"
 }
 
 output "sql_connection_string" {
@@ -16,7 +16,7 @@ output "storage_account_id" {
 }
 
 output "storage_account_name" {
-  value = azurerm_storage_account.docs.name
+  value = local.storage_account_name
 }
 
 output "servicebus_namespace_id" {
@@ -24,7 +24,7 @@ output "servicebus_namespace_id" {
 }
 
 output "servicebus_namespace_name" {
-  value = azurerm_servicebus_namespace.tracking.name
+  value = local.servicebus_namespace_name
 }
 
 output "servicebus_primary_connection_string" {
