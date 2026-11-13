@@ -14,6 +14,6 @@ module "persistence" {
   servicebus_namespace_name = local.sb_name # TODO: move to tracking
 
   location            = var.location
-  resource_group_name = azurerm_resource_group.data.name
+  resource_group_name = local.rg_data_name
   tags                = local.tags
 }

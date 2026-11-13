@@ -3,7 +3,7 @@ module "security" {
 
   name                = local.kv_name
   location            = var.location
-  resource_group_name = azurerm_resource_group.app.name
+  resource_group_name = local.rg_app_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   deployer_object_id  = data.azurerm_client_config.current.object_id
 

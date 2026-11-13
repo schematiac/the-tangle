@@ -10,8 +10,11 @@ param appInsightsConnectionString string
 param carrierEdiEndpoint string
 param tags object = {}
 
+var appName = functionAppName
+var storageName = storageAccountName
+
 resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
-  name: storageAccountName
+  name: storageName
 }
 
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
@@ -30,7 +33,7 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
 }
 
 resource func 'Microsoft.Web/sites@2023-12-01' = {
-  name: functionAppName
+  name: appName
   location: location
   kind: 'functionapp,linux'
   identity: {
@@ -48,7 +51,7 @@ resource func 'Microsoft.Web/sites@2023-12-01' = {
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageName};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -72,6 +75,6 @@ resource func 'Microsoft.Web/sites@2023-12-01' = {
   tags: tags
 }
 
-output name string = func.name
+output name string = appName
 output defaultHostname string = func.properties.defaultHostName
 output principalId string = func.identity.principalId

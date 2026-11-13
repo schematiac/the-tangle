@@ -1,5 +1,10 @@
+locals {
+  vnet_name = var.name
+  nsg_name  = { for k, _ in var.subnets : k => "nsg-${k}" }
+}
+
 resource "azurerm_virtual_network" "this" {
-  name                = var.name
+  name                = local.vnet_name
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.address_space
@@ -11,7 +16,7 @@ resource "azurerm_subnet" "this" {
 
   name                 = each.key
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.this.name
+  virtual_network_name = local.vnet_name
   address_prefixes     = [each.value.address_prefix]
   service_endpoints    = each.value.service_endpoints
 
@@ -30,7 +35,7 @@ resource "azurerm_subnet" "this" {
 resource "azurerm_network_security_group" "this" {
   for_each = var.subnets
 
-  name                = "nsg-${each.key}"
+  name                = local.nsg_name[each.key]
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = var.tags
@@ -49,7 +54,7 @@ resource "azurerm_network_security_rule" "deny_internet_inbound" {
   source_address_prefix       = "Internet"
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.this[each.key].name
+  network_security_group_name = local.nsg_name[each.key]
 }
 
 resource "azurerm_subnet_network_security_group_association" "this" {

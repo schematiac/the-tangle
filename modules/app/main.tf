@@ -41,7 +41,7 @@ resource "azurerm_linux_web_app" "portal" {
 
 resource "azurerm_linux_web_app" "api" {
   name                      = var.api_app_name
-  location                  = var.location
+  location                  = "westus3"
   resource_group_name       = var.resource_group_name
   service_plan_id           = azurerm_service_plan.this.id
   https_only                = true

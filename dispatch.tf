@@ -5,7 +5,7 @@ module "dispatch" {
   portal_app_name     = local.portal_app_name
   api_app_name        = local.api_app_name
   location            = var.location
-  resource_group_name = azurerm_resource_group.app.name
+  resource_group_name = local.rg_app_name
   sku_name            = var.app_service_sku
 
   # VNet integration subnet for both web apps

@@ -12,6 +12,7 @@ locals {
   rg_network_name = "rg-${local.name_base}-net"
   rg_app_name     = "rg-${local.name_base}-app"
   rg_data_name    = "rg-${local.name_base}-data"
+  # Copy these. Reading the name back off the resource group cycles. -D
 
   vnet_name       = "vnet-${local.name_base}"
   plan_name       = "asp-${local.name_base}"
