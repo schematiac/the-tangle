@@ -1,0 +1,29 @@
+# SchematIaC canvas. Safe to edit by hand, and safe to delete — it describes
+# a diagram over your infrastructure code, never the infrastructure itself.
+#
+#   files     the IaC files on this canvas (Terraform .tf/.tfvars, or Bicep
+#             .bicep/.bicepparam), workspace-relative
+#   positions where each node sits: [x, y], or [x, y, width, key-column] for a
+#             node you have resized. One line per node, sorted, so parallel
+#             edits to different nodes merge cleanly
+#   workspaces optional: simulated Terraform workspaces — named sets of
+#             variable values, built by right-clicking a variable on the
+#             canvas, or by hand:
+#                 workspaces = {
+#                   "dev" = {
+#                     vnet_address_space = ["10.20.0.0/16"]
+#                     client_secret      = "secret1"
+#                   }
+#                 }
+#                 workspace = "dev"   # the active one; at most one is active
+#             The active set is applied over defaults and tfvars, exactly as
+#             the real workspace would at plan time. Use placeholders for
+#             secrets — the point is tracing where a value flows, not knowing
+#             it. Rewritten by canvas actions; safe to edit by hand between
+#             them.
+
+files = [
+    "versions.tf",
+]
+positions = {
+}
